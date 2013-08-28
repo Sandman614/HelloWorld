@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HelloWorld</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="hello_world2">Hello world, Second Page!</string>
+    <string name="addButton">Add</string>
+    <string name="removeButton">Remove</string>
+    <string name="hintMaint">Buy Tires</string>
+    <string name="hintInterval">50000</string>
+
+</resources>
