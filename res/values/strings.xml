@@ -10,5 +10,9 @@
     <string name="removeButton">Remove</string>
     <string name="hintMaint">Buy Tires</string>
     <string name="hintInterval">50000</string>
-
+    <string name="maint_string">Some Maintenance</string>
+    <string name="database_path">/data/data/com.sandz.HelloWorld/databases/</string>
+    <string name="database_name">maintenance.db</string>
+    <string name="schema_version">1</string>
+    
 </resources>
