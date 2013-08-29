@@ -1,16 +1,14 @@
 package com.sandz.helloworld;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,24 +30,24 @@ public class SecondActivity extends Activity {
 //		ListView element, obtained by id
 			ListView myListView = (ListView)findViewById(R.id.maintListView);
 //		EditText Element
-			myEditText1 = (EditText)findViewById(R.id.editMaintText);
-			myEditText2 = (EditText)findViewById(R.id.editIinterval);
+//			myEditText1 = (EditText)findViewById(R.id.editMaintText);
+//			myEditText2 = (EditText)findViewById(R.id.editIinterval);
 			
 			dbMaintenanceHelper = new MaintenanceHelper(this);
 			
 			dbMaintenanceHelper.createDatabase();
-			dbMaintenanceHelper.openDatabase();
+			dbMaintenanceHelper.openDataBase();
 			
 			ourCursor = dbMaintenanceHelper.getCursor();
 			
 //		turn on array adapter
-			adapter=new MaintenanceAdapter();
+			adapter=new MaintenanceAdapter(ourCursor);
 			myListView.setAdapter(adapter);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		VideoString = http://www.youtube.com/watch?v=Awu7Rlsez_k&list=PLCdeOMca6qwtJ9AOGPBQYgLW1TZcWORz9&feature=player_detailpage#t=119
+
 		
 	}
 
@@ -62,27 +60,50 @@ public class SecondActivity extends Activity {
 	
 	public void addNotification(View view){
 //		add the note
-		maintList.add(0, myEditText1.getText().toString());
+//		maintList.add(0, myEditText1.getText().toString());
 //		update the view
-		adapter.notifyDataSetChanged();
+//		adapter.notifyDataSetChanged();
 //		erase the text so we can add another note
-		myEditText1.setText("");
-		myEditText2.setText("");
+//		myEditText1.setText("");
+//		myEditText2.setText("");
 	}
 
 	public void removeNotification(View view){
 		
 	}
 	
-	class MaintenanceAdapter extends ArrayAdapter<String> {
+	class MaintenanceAdapter extends CursorAdapter {
+
+		public MaintenanceAdapter(Cursor c) {
+			super(SecondActivity.this, c);
+		}
+
+		@Override
+		public void bindView(View row, Context context, Cursor c) {
+			MaintenanceHolder holder=(MaintenanceHolder)row.getTag();
+			holder.populateFrom(c, dbMaintenanceHelper);
+		}
+
+		@Override
+		public View newView(Context context, Cursor cursor, ViewGroup parent) {
+			LayoutInflater inflator = getLayoutInflater();
+			View row=inflator.inflate(R.layout.custom_list_item, parent, false);
+			MaintenanceHolder holder = new MaintenanceHolder(row);
+			row.setTag(holder);
+			return (row);
+		}
+		
+	}
+	
+/*	class MaintenanceAdapter extends ArrayAdapter<String> {
 		
 		public MaintenanceAdapter() {
 			super(SecondActivity.this, android.R.layout.simple_list_item_1, maintList);
 		}
 
-		/* (non-Javadoc)
+		 (non-Javadoc)
 		 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-		 */
+		 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			MaintenanceHolder holder;
@@ -103,7 +124,7 @@ public class SecondActivity extends Activity {
 			return(convertView);
 		}
 
-	}
+	}*/
 
 	static class MaintenanceHolder{
 		public TextView note = null;
@@ -111,8 +132,8 @@ public class SecondActivity extends Activity {
 		MaintenanceHolder(View row){
 			note = (TextView)row.findViewById(R.id.maintText);
 		}
-		void populateFrom(String r){
-			note.setText(r);
+		void populateFrom(Cursor c, MaintenanceHelper r){
+			note.setText(r.getName(c));
 		}
 	}
 

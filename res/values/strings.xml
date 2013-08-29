@@ -14,5 +14,9 @@
     <string name="database_path">/data/data/com.sandz.HelloWorld/databases/</string>
     <string name="database_name">maintenance.db</string>
     <string name="schema_version">1</string>
+    <string name="table_name">Maintenance</string>
+    <string name="column_id">_id</string>
+    <string name="column1_name">maintenance_name</string>
+    <string name="column2_name">interval_mileage</string>
     
 </resources>
