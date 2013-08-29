@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,10 +19,10 @@ public class SecondActivity extends Activity {
 	private MaintenanceHelper dbMaintenanceHelper = null;
 	private Cursor ourCursor = null;
 	private MaintenanceAdapter adapter = null;
-//	
+	
 //	ArrayList<String> maintList = new ArrayList<String>();
-//	EditText myEditText1;
-//	EditText myEditText2;
+	EditText editMaint;
+	EditText editInterval;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +32,19 @@ public class SecondActivity extends Activity {
 //		ListView element, obtained by id
 			ListView myListView = (ListView)findViewById(R.id.maintListView);
 //		EditText Element
-//			myEditText1 = (EditText)findViewById(R.id.editMaintText);
-//			myEditText2 = (EditText)findViewById(R.id.editIinterval);
-			
+			editMaint = (EditText)findViewById(R.id.editMaintText);
+			editInterval = (EditText)findViewById(R.id.editIintervalText);
+
 			dbMaintenanceHelper = new MaintenanceHelper(this);
-			
-			dbMaintenanceHelper.createDatabase();
+
+			/*		
+	 		dbMaintenanceHelper.createDatabase();
 			dbMaintenanceHelper.openDataBase();
-			
-			ourCursor = dbMaintenanceHelper.getCursor();
+			 */
+
+			ourCursor = dbMaintenanceHelper.getAll();
+
+			startManagingCursor(ourCursor);
 			
 //		turn on array adapter
 			adapter=new MaintenanceAdapter(ourCursor);
@@ -57,21 +63,39 @@ public class SecondActivity extends Activity {
 		getMenuInflater().inflate(R.menu.second, menu);
 		return true;
 	}
-	
+
+	/*
+	 *  Adds a Notification to the database
+	 */
 	public void addNotification(View view){
-//		add the note
-//		maintList.add(0, myEditText1.getText().toString());
-//		update the view
-//		adapter.notifyDataSetChanged();
-//		erase the text so we can add another note
-//		myEditText1.setText("");
-//		myEditText2.setText("");
+//		dbMaintenanceHelper.debugReadValues();
+//		Log.i("Tim", "Line before insert is called.");
+		dbMaintenanceHelper.insert(editMaint.getText().toString(), editInterval.getText().toString());
+		dbMaintenanceHelper.debugReadValues();
+		ourCursor.requery();
+//		ourCursor = dbMaintenanceHelper.getAll();
+		editMaint.setText("");
+//		editInterval.setText("");
 	}
 
+	/*
+	 *  Removes a Notification to the database
+	 */
 	public void removeNotification(View view){
-		
+
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		dbMaintenanceHelper.close();
+	}
+
+
+
 	class MaintenanceAdapter extends CursorAdapter {
 
 		public MaintenanceAdapter(Cursor c) {
@@ -127,13 +151,19 @@ public class SecondActivity extends Activity {
 	}*/
 
 	static class MaintenanceHolder{
-		public TextView note = null;
+		public TextView rowMaint = null;
+//		public TextView rowInterval = null;
 
 		MaintenanceHolder(View row){
-			note = (TextView)row.findViewById(R.id.maintText);
+			rowMaint = (TextView)row.findViewById(R.id.rowMaintView);
+//			rowInterval = (TextView)row.findViewById(R.id.rowIntervalView);
 		}
 		void populateFrom(Cursor c, MaintenanceHelper r){
-			note.setText(r.getName(c));
+			rowMaint.setText(r.getColumnName(c, 1));
+//			Log.i("Populate","Column Name 1: "+r.getColumnName(c, 1));
+//			rowInterval.setText(r.getColumnName(c, 2));
+//			Log.i("Populate","Column Name 2: "+r.getColumnName(c, 2));
+			
 		}
 	}
 
