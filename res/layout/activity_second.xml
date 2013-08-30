@@ -1,40 +1,30 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".SecondActivity" >
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/remove_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:drawableLeft="@android:drawable/ic_menu_delete"
-        android:onClick="removeNotification"
         android:text="@string/removeButton" />
+
+<!--         android:onClick="removeNotification" -->
 
     <Button
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:drawableLeft="@android:drawable/ic_menu_add"
-        android:onClick="addNotification"
         android:text="@string/addButton" />
+<!--         android:onClick="addNotification" -->
 
     <EditText
         android:id="@+id/editMaintText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/remove_button"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/editIintervalText"
         android:ems="10"
         android:gravity="left|center_vertical"
         android:hint="@string/hintMaint"
@@ -44,8 +34,6 @@
         android:id="@+id/editIintervalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/remove_button"
-        android:layout_alignParentRight="true"
         android:ems="5"
         android:gravity="right|center_vertical"
         android:hint="@string/hintInterval"
@@ -55,9 +43,6 @@
         android:id="@+id/maintListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/editMaintText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:text="@string/hello_world2" />
 
-</RelativeLayout>
+</LinearLayout>

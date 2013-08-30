@@ -37,7 +37,8 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL("CREATE TABLE '"+TABLE_NAME+"'('"+COLUMN_ID+"' INTEGER PRIMARY KEY AUTOINCREMENT, '"+COLUMN1_NAME+"' TEXT, '"+COLUMN2_NAME+"' INT);");
+//		db.execSQL("CREATE TABLE '"+TABLE_NAME+"'('"+COLUMN_ID+"' INTEGER PRIMARY KEY AUTOINCREMENT, '"+COLUMN1_NAME+"' TEXT, '"+COLUMN2_NAME+"' INT);");
+		db.execSQL("CREATE TABLE '"+TABLE_NAME+"'("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN1_NAME+" TEXT, "+COLUMN2_NAME+" INT);");
 	}
 
 	public void debugReadValues(){
@@ -56,18 +57,37 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 
 	}
+	
 
-	public void insert(String maint, String interval){
+	public void insert(String maint){
 		ContentValues cv = new ContentValues();
 		cv.put(COLUMN1_NAME,maint);
 //		cv.put(COLUMN2_NAME,interval);
 		//		Insert cv key values into the database
 		getWritableDatabase().insert(TABLE_NAME, COLUMN1_NAME, cv);
 	}
+	
+	public void update(String id, String maint){
+		ContentValues cv = new ContentValues();
+		String[] args = {id};
+		cv.put(COLUMN1_NAME, maint);
+		getWritableDatabase().update(TABLE_NAME, cv, "'"+COLUMN_ID+"'=?", args);
+	}
+	
+	public void delete(String id){
+		ContentValues cv = new ContentValues();
+		getWritableDatabase().delete("'"+COLUMN1_NAME+"'", "'"+COLUMN_ID+"'=?", new String[] {id});
+	}
 
 	public Cursor getAll(){
 		return(getReadableDatabase().rawQuery("SELECT '"+COLUMN_ID+"', '"+COLUMN1_NAME+"' FROM '"+TABLE_NAME+"'", null));
 	}
+	
+	public Cursor getByID(String id){
+		String[] args={id};
+		return(getReadableDatabase().rawQuery("SELECT '"+COLUMN_ID+"', '"+COLUMN1_NAME+"' FROM '"+COLUMN1_NAME+"' WHERE '"+COLUMN_ID+"'=?", args));
+	}
+	
 	/*
 	public void createDatabase(){
 		createDB();
@@ -164,7 +184,7 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 	 * Formerly getNote()
 	 * Gets column names
 	 */
-	public String getColumnName(Cursor c, int col){
+	public String getEntry(Cursor c, int col){
 		return(c.getString(col));
 	}
 }

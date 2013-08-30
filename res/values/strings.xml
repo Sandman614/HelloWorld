@@ -18,5 +18,7 @@
     <string name="column_id">_id</string>
     <string name="column1_name">maintenance_name</string>
     <string name="column2_name">interval_mileage</string>
+    <string name="popup_title">Add Your Maintenance</string>
+    <string name="popup_text">Edit:</string>
     
 </resources>
