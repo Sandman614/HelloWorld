@@ -18,8 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@android:drawable/ic_menu_add"
-        android:text="@string/addButton" />
-<!--         android:onClick="addNotification" -->
+        android:text="@string/addButton"        
+        android:onClick="addNotification" />
 
     <EditText
         android:id="@+id/editMaintText"

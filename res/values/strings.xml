@@ -15,9 +15,9 @@
     <string name="database_name">maintenance.db</string>
     <string name="schema_version">1</string>
     <string name="table_name">Maintenance</string>
-    <string name="column_id">_id</string>
-    <string name="column1_name">maintenance_name</string>
-    <string name="column2_name">interval_mileage</string>
+    <string name="dbColumn0_name">_id</string>
+    <string name="dbColumn1_name">Maintenance</string>
+    <string name="dbColumn2_name">Mileage</string>
     <string name="popup_title">Add Your Maintenance</string>
     <string name="popup_text">Edit:</string>
     

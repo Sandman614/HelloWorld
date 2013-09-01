@@ -52,15 +52,14 @@ public class SecondActivity extends Activity {
 			dataset_cursor = helper.getAll();
 
 			startManagingCursor(dataset_cursor);
-			
-//		turn on array adapter
+
 			adapter=new MaintenanceAdapter(dataset_cursor);
 			list.setAdapter(adapter);
 			
 			list.setOnItemClickListener(onListClick);
 			
-			Button btnSimple = (Button) findViewById(R.id.add_button);
-			btnSimple.setOnClickListener(onAdd);
+//			Button btnSimple = (Button) findViewById(R.id.add_button);
+//			btnSimple.setOnClickListener(onAdd);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -83,12 +82,15 @@ public class SecondActivity extends Activity {
 	public void addNotification(View view){
 //		dbMaintenanceHelper.debugReadValues();
 //		Log.i("Tim", "Line before insert is called.");
-		helper.insert(editMaint.getText().toString());
-		helper.debugReadValues();
-		dataset_cursor.requery();
+//		helper.insert(editMaint.getText().toString());
+//		helper.debugReadValues();
+//		dataset_cursor.requery();
 //		ourCursor = dbMaintenanceHelper.getAll();
-		editMaint.setText("");
+//		editMaint.setText("");
 //		editInterval.setText("");
+		
+		Log.i("Tim", "Entered onAdd()");
+		edit_box();
 	}
 
 	/*
