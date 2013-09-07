@@ -53,6 +53,7 @@ public class SecondActivity extends Activity {
 
 			startManagingCursor(dataset_cursor);
 
+			// this be broke.
 			adapter=new MaintenanceAdapter(dataset_cursor);
 			list.setAdapter(adapter);
 			
@@ -64,6 +65,8 @@ public class SecondActivity extends Activity {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			Log.wtf("Tim", "Something is broken");
 		}
 
 		
@@ -100,10 +103,6 @@ public class SecondActivity extends Activity {
 
 	}
 	
-	public void onListClick(View view){
-		
-	}
-
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onDestroy()
 	 */
@@ -136,18 +135,19 @@ public class SecondActivity extends Activity {
 	};
 	
 	private void edit_box(){
-		Log.i("Tim", "Entered on editBow()");
+		Log.i("Tim", "Entered on editBox()");
 		final View addView = getLayoutInflater().inflate(R.layout.add, null);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("");
+		builder.setTitle("Add Your Maintenance");
 		builder.setView(addView);
 
 		EditText editNote = (EditText)addView.findViewById(R.id.title);
 
 		if(maintID != null){
-			Log.i("Tim", "editBox() maintID !=null");
+			Log.i("Tim", "editBox() maintID !=null, maintID = " +maintID);
 			Cursor c = helper.getByID(maintID);
 			c.moveToFirst();
+			Log.i("Tim", "helper.getEntry(c,1) = " + helper.getEntry(c,1));
 			editNote.setText(helper.getEntry(c,1));
 		}
 		//  Add button

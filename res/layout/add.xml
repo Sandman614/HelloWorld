@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
-    
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -11,17 +11,23 @@
 
     <EditText
         android:id="@+id/title"
-        android:inputType="text"
-        android:hint="@string/hintMaint"
-     	android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dip" />
+        android:layout_marginLeft="4dip"
+        android:layout_weight="0.45"
+        android:hint="@string/hintMaint"
+        android:inputType="text" />
+
     <EditText
         android:id="@+id/title2"
-        android:inputType="number"
-        android:hint="@string/hintInterval"
-     	android:layout_width="fill_parent"
+        android:layout_width="98dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dip" />
-        
+        android:layout_marginLeft="4dip"
+        android:ems="10"
+        android:hint="@string/hintInterval"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
+
 </LinearLayout>

@@ -37,8 +37,7 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-//		db.execSQL("CREATE TABLE '"+TABLE_NAME+"'('"+COLUMN_ID+"' INTEGER PRIMARY KEY AUTOINCREMENT, '"+dbColumn1_name+"' TEXT, '"+dbColumn2_name+"' INT);");
-		db.execSQL("CREATE TABLE '"+TABLE_NAME+"'("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+dbColumn1_name+" TEXT, "+dbColumn2_name+" INT);");
+		db.execSQL("CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + dbColumn1_name + " TEXT, " + dbColumn2_name + " INT);");
 	}
 
 	public void debugReadValues(){
@@ -80,12 +79,23 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 	}
 
 	public Cursor getAll(){
-		return(getReadableDatabase().rawQuery("SELECT '"+COLUMN_ID+"', '"+dbColumn1_name+"' FROM '"+TABLE_NAME+"'", null));
+//		does illegalargumentexception: column '_id' does not exist.  Solution: take out single quotes around COLUMN_ID. 
+//			Single quotes tell sqlite to get the value instead of the column header.
+//		return(getReadableDatabase().rawQuery("SELECT '"+COLUMN_ID+"', '"+dbColumn1_name+"' FROM '"+TABLE_NAME+"'", null));
+		
+//		Entrys displayed show MaintenanceTextView
+//		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", '"+dbColumn1_name+"' FROM '"+TABLE_NAME+"'", null));
+		
+
+		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", "+dbColumn1_name+" FROM "+TABLE_NAME+"", null));
 	}
 	
 	public Cursor getByID(String id){
+		Log.i("Tim","id = "+id);
 		String[] args={id};
-		return(getReadableDatabase().rawQuery("SELECT '"+COLUMN_ID+"', '"+dbColumn1_name+"' FROM '"+dbColumn1_name+"' WHERE '"+COLUMN_ID+"'=?", args));
+//		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", '"+dbColumn1_name+"' FROM '"+dbColumn1_name+"' WHERE '"+COLUMN_ID+"'=?", args));
+
+		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", "+dbColumn1_name+" FROM "+dbColumn1_name+" WHERE "+COLUMN_ID+"=?", args));
 	}
 	
 	/*
