@@ -1,21 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:color="#EE0000"        
-        android:id="@+id/rowMaintView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/rowMaintView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"
+            android:layout_weight="0.45"
+            android:text="MaintView"
+            android:color="#EE0000" />
+
+        <TextView
+            android:id="@+id/rowIntervalView"
+            android:layout_width="98dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"
+            android:text="IntervalView"
+            android:color="#EE0000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayout1" >
 
-    <TextView
-        android:id="@+id/rowIntervalView"
-        android:color="#EE0000"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        <TextView
+            android:id="@+id/rowMileageDue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"
+            android:layout_weight="0.45"
+            android:text="MileageDue"
+            android:color="#EE0000" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/rowRangeView"
+            android:layout_width="98dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"
+            android:text="RangeView"
+            android:color="#EE0000" />
+    </LinearLayout>
+
+</RelativeLayout>

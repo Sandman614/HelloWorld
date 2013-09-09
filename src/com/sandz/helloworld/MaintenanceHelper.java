@@ -15,8 +15,7 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 
 	private static final int SCHEMA_VERSION = 1;
 	private static final String DATABASE_NAME = "maintenance.db";
-	
-//	private static String DATABASE_PATH;
+
 	private String TABLE_NAME;
 	private String COLUMN_ID;
 	private String dbColumn1_name;
@@ -27,7 +26,6 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 
 	public MaintenanceHelper(Context context) {
 		super(context, DATABASE_NAME, null, SCHEMA_VERSION);
-//		DATABASE_PATH = context.getResources().getString(R.string.database_path);
 		TABLE_NAME = context.getResources().getString(R.string.table_name);
 		COLUMN_ID = context.getResources().getString(R.string.dbColumn0_name);
 		dbColumn1_name = context.getResources().getString(R.string.dbColumn1_name);
@@ -40,139 +38,42 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + dbColumn1_name + " TEXT, " + dbColumn2_name + " INT);");
 	}
 
-	public void debugReadValues(){
-//		Log.e("SQL","CREATE TABLE '"+TABLE_NAME+"'('"+COLUMN_ID+"' INTEGER PRIMARY KEY AUTOINCREMENT, '"+dbColumn1_name+"' TEXT, '"+dbColumn2_name+"' INT);");
-		Log.i("SQL","Constant TABLE_NAME = "+TABLE_NAME);
-//		Log.i("SQL","XML R.string.table_name = "+R.string.table_name);
-		Log.i("SQL","Constant dbColumn1_name = "+dbColumn1_name);
-//		Log.i("SQL","XML R.string.dbColumn1_name = "+R.string.dbColumn1_name);
-//		Log.i("SQL","Constant dbColumn2_name = "+dbColumn2_name);
-//		Log.i("SQL","XML R.string.dbColumn2_name = "+R.string.dbColumn2_name);
-		
-	}
-
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
 
 	}
-	
 
-	public void insert(String maint){
-		ContentValues cv = new ContentValues();
-		cv.put(dbColumn1_name,maint);
-//		cv.put(dbColumn2_name,interval);
-		//		Insert cv key values into the database
-		getWritableDatabase().insert(TABLE_NAME, dbColumn1_name, cv);
+
+	public void insert(String maint, String interval){
+			ContentValues cv = new ContentValues();
+			cv.put(dbColumn1_name,maint);
+			cv.put(dbColumn2_name,interval);
+			//		Insert cv key values into the database
+			getWritableDatabase().insert(TABLE_NAME, dbColumn1_name, cv);
 	}
-	
-	public void update(String id, String maint){
-		ContentValues cv = new ContentValues();
-		String[] args = {id};
-		cv.put(dbColumn1_name, maint);
-		getWritableDatabase().update(TABLE_NAME, cv, "'"+COLUMN_ID+"'=?", args);
+
+	public void update(String id, String maint, String interval){
+			ContentValues cv = new ContentValues();
+			String[] args = {id};
+			cv.put(dbColumn1_name, maint);
+			cv.put(dbColumn2_name,interval);
+			getWritableDatabase().update(TABLE_NAME, cv, COLUMN_ID+"=?", args);
 	}
-	
+
 	public void delete(String id){
 		ContentValues cv = new ContentValues();
-		getWritableDatabase().delete("'"+dbColumn1_name+"'", "'"+COLUMN_ID+"'=?", new String[] {id});
+		getWritableDatabase().delete(dbColumn1_name, COLUMN_ID+"=?", new String[] {id});
 	}
 
 	public Cursor getAll(){
-//		does illegalargumentexception: column '_id' does not exist.  Solution: take out single quotes around COLUMN_ID. 
-//			Single quotes tell sqlite to get the value instead of the column header.
-//		return(getReadableDatabase().rawQuery("SELECT '"+COLUMN_ID+"', '"+dbColumn1_name+"' FROM '"+TABLE_NAME+"'", null));
-		
-//		Entrys displayed show MaintenanceTextView
-//		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", '"+dbColumn1_name+"' FROM '"+TABLE_NAME+"'", null));
-		
-
-		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", "+dbColumn1_name+" FROM "+TABLE_NAME+"", null));
+		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", "+dbColumn1_name+", "+dbColumn2_name+" FROM "+TABLE_NAME+"", null));
 	}
-	
+
 	public Cursor getByID(String id){
-		Log.i("Tim","id = "+id);
 		String[] args={id};
-//		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", '"+dbColumn1_name+"' FROM '"+dbColumn1_name+"' WHERE '"+COLUMN_ID+"'=?", args));
-
-		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", "+dbColumn1_name+" FROM "+dbColumn1_name+" WHERE "+COLUMN_ID+"=?", args));
+		return(getReadableDatabase().rawQuery("SELECT "+COLUMN_ID+", "+dbColumn1_name+", "+dbColumn2_name+" FROM "+TABLE_NAME+" WHERE "+COLUMN_ID+"=?", args));
 	}
-	
-	/*
-	public void createDatabase(){
-		createDB();
-	}
-
-	private void createDB(){
-		boolean dbExist = DBExists();
-
-		if(!dbExist){
-			//			Creates an empty database 
-			this.getReadableDatabase();
-			//			Copy the included database
-			copyDBFromResource();
-
-		}
-	}
-	 */
-	
-	/*
-	private boolean DBExists(){
-		SQLiteDatabase db = null;
-
-		try {
-			String databasePath = DATABASE_PATH + DATABASE_NAME;
-			db = SQLiteDatabase.openDatabase(databasePath, null, SQLiteDatabase.OPEN_READWRITE);
-			db.setLocale(Locale.getDefault());
-			db.setLockingEnabled(true);
-			db.setVersion(1);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		if(db != null)
-			db.close();
-
-		return db != null ? true : false;
-	}
-	
-	 */
-	
-	/*
-	private void copyDBFromResource(){
-		InputStream inputStream = null;
-		OutputStream outputStream = null;
-		String dbFilePath = DATABASE_PATH + DATABASE_NAME;
-
-		try {
-			inputStream = myContext.getAssets().open(DATABASE_NAME);
-			outputStream = new FileOutputStream(dbFilePath);
-
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length=inputStream.read(buffer))>0){
-				outputStream.write(buffer, 0, length);
-			}
-
-			outputStream.flush();
-			outputStream.close();
-			inputStream.close();
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void openDataBase() throws SQLException{
-		String myPath = DATABASE_PATH + DATABASE_NAME;
-		dbSqlite = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-	}
-	 */
 
 	@Override
 	public synchronized void close() {
@@ -180,16 +81,7 @@ public class MaintenanceHelper extends SQLiteOpenHelper {
 			dbSqlite.close();
 		super.close();
 	}
-	/*
-	public Cursor getCursor() {
-		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		queryBuilder.setTables(TABLE_NAME);
-		String[] asColumnsToReturn = new String[]{COLUMN_ID, dbColumn1_name, dbColumn2_name};
-		Cursor mCursor = queryBuilder.query(dbSqlite, asColumnsToReturn, null, null, null, null, dbColumn1_name + " ASC");
-		return mCursor;
-	}
-	 */
-	
+
 	/*
 	 * Formerly getNote()
 	 * Gets column names

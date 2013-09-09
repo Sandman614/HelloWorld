@@ -9,45 +9,36 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * @author Gallagher
+ *
+ */
 public class SecondActivity extends Activity {
 
-	MaintenanceAdapter adapter = null;
-	MaintenanceHelper helper = null;
-	Cursor dataset_cursor = null;
-	
-	EditText editMaint;
-	EditText editInterval;
-	
-	AlertDialog alertDialog = null;
-	
-	String maintID = null;
+	private MaintenanceAdapter adapter = null;
+	private MaintenanceHelper helper = null;
+	private Cursor dataset_cursor = null;
+
+	private String maintID = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
 			setContentView(R.layout.activity_second);
-//		ListView element, obtained by id
+			//		ListView element, obtained by id
 			ListView list = (ListView)findViewById(R.id.maintListView);
-//		EditText Element
-//			editMaint = (EditText)findViewById(R.id.editMaintText);
-//			editInterval = (EditText)findViewById(R.id.editIintervalText);
 
 			helper = new MaintenanceHelper(this);
-
-			/*		
-	 		dbMaintenanceHelper.createDatabase();
-			dbMaintenanceHelper.openDataBase();
-			 */
 
 			dataset_cursor = helper.getAll();
 
@@ -56,43 +47,39 @@ public class SecondActivity extends Activity {
 			// this be broke.
 			adapter=new MaintenanceAdapter(dataset_cursor);
 			list.setAdapter(adapter);
-			
+
 			list.setOnItemClickListener(onListClick);
-			
-//			Button btnSimple = (Button) findViewById(R.id.add_button);
-//			btnSimple.setOnClickListener(onAdd);
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
 			Log.wtf("Tim", "Something is broken");
 		}
 
-		
+
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.second, menu);
+		getMenuInflater().inflate(R.menu.option, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId()==R.id.action_settings) {
+			edit_box();
+			return(true);
+		}
+		return (super.onOptionsItemSelected(item));
 	}
 
 	/*
 	 *  Adds a Notification to the database
 	 */
-	public void addNotification(View view){
-//		dbMaintenanceHelper.debugReadValues();
-//		Log.i("Tim", "Line before insert is called.");
-//		helper.insert(editMaint.getText().toString());
-//		helper.debugReadValues();
-//		dataset_cursor.requery();
-//		ourCursor = dbMaintenanceHelper.getAll();
-//		editMaint.setText("");
-//		editInterval.setText("");
-		
-		Log.i("Tim", "Entered onAdd()");
+	public void addNotification(View view){		
+		//		Log.i("Tim", "Entered onAdd()");
 		edit_box();
 	}
 
@@ -102,7 +89,7 @@ public class SecondActivity extends Activity {
 	public void removeNotification(View view){
 
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onDestroy()
 	 */
@@ -112,17 +99,6 @@ public class SecondActivity extends Activity {
 		helper.close();
 	}
 
-
-	private View.OnClickListener onAdd=new View.OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			Log.i("Tim", "Entered onAdd()");
-			edit_box();
-		}
-	};
-	
 	private AdapterView.OnItemClickListener onListClick=new AdapterView.OnItemClickListener() {
 
 		@Override
@@ -133,61 +109,83 @@ public class SecondActivity extends Activity {
 			edit_box();
 		}
 	};
-	
+
+	private void errorBox(){
+		AlertDialog.Builder errorPopup = new AlertDialog.Builder(this);
+		errorPopup.setTitle("Blank entry");
+		errorPopup.setMessage("Entries cannot be blank.");
+		errorPopup.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) { 
+				//				Return
+			}
+		});
+		errorPopup.show();
+	}
+
 	private void edit_box(){
-		Log.i("Tim", "Entered on editBox()");
 		final View addView = getLayoutInflater().inflate(R.layout.add, null);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Add Your Maintenance");
 		builder.setView(addView);
 
-		EditText editNote = (EditText)addView.findViewById(R.id.title);
+		EditText editNote1 = (EditText)addView.findViewById(R.id.title);
+		EditText editNote2 = (EditText)addView.findViewById(R.id.title2);
 
+		//		Edit Entry
 		if(maintID != null){
-			Log.i("Tim", "editBox() maintID !=null, maintID = " +maintID);
 			Cursor c = helper.getByID(maintID);
 			c.moveToFirst();
-			Log.i("Tim", "helper.getEntry(c,1) = " + helper.getEntry(c,1));
-			editNote.setText(helper.getEntry(c,1));
+			editNote1.setText(helper.getEntry(c,1));
+			editNote2.setText(helper.getEntry(c,2));
 		}
-		//  Add button
+
+		//		Add Entry Button
 		builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
 				// TODO Auto-generated method stub
-				EditText editNote = (EditText)addView.findViewById(R.id.title);
+				EditText editNote1 = (EditText)addView.findViewById(R.id.title);
+				EditText editNote2 = (EditText)addView.findViewById(R.id.title2);
 				//save it
-				if(maintID==null)
-					helper.insert(editNote.getText().toString());
+				String maint = editNote1.getText().toString();
+				String interval = editNote2.getText().toString();
+
+				if(maint.length()>0 && interval.length()>0){
+				if(maintID==null){
+					helper.insert(maint, interval);
+				}
 				else{
-					helper.update(maintID,editNote.getText().toString());
+					helper.update(maintID,maint, interval);
 					//set back to null so next note is new
 					maintID = null;
 				}
 				dataset_cursor.requery();
+				}
+				else
+					errorBox();
 			}
 		});
-		//  cancel button
+
+		//		cancel button
 		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
 				// TODO Auto-generated method stub
 			}});
-		//  delete button
+
+		//		delete entry button
 		builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
 				// TODO Auto-generated method stub
-				EditText editNote = (EditText)addView.findViewById(R.id.title);
-				//save it
 				if(maintID==null)
 					return;
 				else{
 					helper.delete(maintID);
-					//set back to null so next note is new
+					//set back to null so next entry is new
 					maintID = null;
 				}
 				dataset_cursor.requery();
@@ -217,53 +215,24 @@ public class SecondActivity extends Activity {
 			row.setTag(holder);
 			return (row);
 		}
-		
+
 	}
-	
-/*	class MaintenanceAdapter extends ArrayAdapter<String> {
-		
-		public MaintenanceAdapter() {
-			super(SecondActivity.this, android.R.layout.simple_list_item_1, maintList);
-		}
 
-		 (non-Javadoc)
-		 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-		 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			MaintenanceHolder holder;
-			
-			if(convertView==null){
-				LayoutInflater inflator = getLayoutInflater();
-				convertView=inflator.inflate(R.layout.custom_list_item, null);
-				
-				holder = new MaintenanceHolder(convertView);
-				
-				convertView.setTag(holder);
-			}
-			else{
-				holder=(MaintenanceHolder)convertView.getTag();
-			}
-			holder.populateFrom(maintList.get(position));
-			
-			return(convertView);
-		}
-
-	}*/
 
 	static class MaintenanceHolder{
-		public TextView rowMaint = null;
-//		public TextView rowInterval = null;
+		private TextView rowMaint = null;
+		private TextView rowInterval = null;
 
 		MaintenanceHolder(View row){
 			rowMaint = (TextView)row.findViewById(R.id.rowMaintView);
-//			rowInterval = (TextView)row.findViewById(R.id.rowIntervalView);
+			rowInterval = (TextView)row.findViewById(R.id.rowIntervalView);
 		}
 		void populateFrom(Cursor c, MaintenanceHelper r){
+//			Log.i("Populate","Column Name 0: "+r.getEntry(c, 0));
 			rowMaint.setText(r.getEntry(c, 1));
-//			Log.i("Populate","Column Name 1: "+r.getColumnName(c, 1));
-//			rowInterval.setText(r.getColumnName(c, 2));
-//			Log.i("Populate","Column Name 2: "+r.getColumnName(c, 2));
+//			Log.i("Populate","Column Name 1: "+r.getEntry(c, 1));
+			rowInterval.setText(r.getEntry(c, 2));
+//			Log.i("Populate","Column Name 2: "+r.getEntry(c, 2));
 			
 		}
 	}

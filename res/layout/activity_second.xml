@@ -4,41 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/remove_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@android:drawable/ic_menu_delete"
-        android:text="@string/removeButton" />
-
-<!--         android:onClick="removeNotification" -->
-
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@android:drawable/ic_menu_add"
-        android:text="@string/addButton"        
-        android:onClick="addNotification" />
-
-    <EditText
-        android:id="@+id/editMaintText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="left|center_vertical"
-        android:hint="@string/hintMaint"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/editIintervalText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="5"
-        android:gravity="right|center_vertical"
-        android:hint="@string/hintInterval"
-        android:inputType="number" />
-
     <ListView
         android:id="@+id/maintListView"
         android:layout_width="fill_parent"
