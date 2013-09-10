@@ -1,4 +1,4 @@
-package com.sandz.helloworld.remote;
+package com.sandz.torque.remote;
 
 interface ITorqueService {
 

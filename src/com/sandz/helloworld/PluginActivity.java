@@ -1,7 +1,6 @@
 package com.sandz.helloworld;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,7 +25,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.sandz.helloworld.remote.ITorqueService;
+import com.sandz.torque.remote.ITorqueService;
 
 /**
  * @author Gallagher
@@ -71,24 +70,27 @@ public class PluginActivity extends Activity {
 		}
 	}
 
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//
-//		// Bind to the torque service
-//		Intent intent = new Intent();
-//		intent.setClassName("com.sandz.helloworld", "org.prowl.torque.remote.TorqueService");
-//		boolean successfulBind = bindService(intent, connection, 0);
+	@Override
+	protected void onResume() {
+		super.onResume();
 
-//		if (successfulBind) {
-//			Log.i("Tim", "Succesful bind to torque service.");
+		// Bind to the torque service
+		Log.i("Tim", "onResume() attempting to bindservice");
+		Intent intent = new Intent();
+		intent.setClassName("com.sandz.torque", "com.sandz.torque.remote.TorqueService");
+		Log.i("Tim", "Stop after setclassname.");
+		boolean successfulBind = bindService(intent, connection, 0);
+		Log.i("Tim", "Stop after bindservice."+ successfulBind);
+
+		if (successfulBind) {
+			Log.i("Tim", "Succesful bind to torque service.");
 //			updateTimer = new Timer();
 //			updateTimer.schedule(new TimerTask() { public void run() {
 ////			update();
 //				getMileage();
 //			}}, 1000, 200);
-//		}
-//	}
+		}
+	}
 //
 //	@Override
 //	protected void onPause() {
