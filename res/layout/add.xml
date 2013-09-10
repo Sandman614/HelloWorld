@@ -25,6 +25,7 @@
         android:layout_marginLeft="4dip"
         android:ems="10"
         android:hint="@string/hintInterval"
+        android:maxLength="6"
         android:inputType="number" >
 
         <requestFocus />

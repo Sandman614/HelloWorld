@@ -2,10 +2,13 @@ package com.sandz.helloworld;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,23 +21,27 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.sandz.helloworld.remote.ITorqueService;
+
 /**
  * @author Gallagher
  *
  */
-public class SecondActivity extends Activity {
+public class PluginActivity extends Activity {
 
 	private MaintenanceAdapter adapter = null;
 	private MaintenanceHelper helper = null;
 	private Cursor dataset_cursor = null;
-
 	private String maintID = null;
+	
+	private ITorqueService torqueService;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
-			setContentView(R.layout.activity_second);
+			setContentView(R.layout.main);
 			//		ListView element, obtained by id
 			ListView list = (ListView)findViewById(R.id.maintListView);
 
@@ -152,15 +159,15 @@ public class SecondActivity extends Activity {
 				String interval = editNote2.getText().toString();
 
 				if(maint.length()>0 && interval.length()>0){
-				if(maintID==null){
-					helper.insert(maint, interval);
-				}
-				else{
-					helper.update(maintID,maint, interval);
-					//set back to null so next note is new
-					maintID = null;
-				}
-				dataset_cursor.requery();
+					if(maintID==null){
+						helper.insert(maint, interval);
+					}
+					else{
+						helper.update(maintID,maint, interval);
+						//set back to null so next note is new
+						maintID = null;
+					}
+					dataset_cursor.requery();
 				}
 				else
 					errorBox();
@@ -198,7 +205,7 @@ public class SecondActivity extends Activity {
 	class MaintenanceAdapter extends CursorAdapter {
 
 		public MaintenanceAdapter(Cursor c) {
-			super(SecondActivity.this, c);
+			super(PluginActivity.this, c);
 		}
 
 		@Override
@@ -228,13 +235,23 @@ public class SecondActivity extends Activity {
 			rowInterval = (TextView)row.findViewById(R.id.rowIntervalView);
 		}
 		void populateFrom(Cursor c, MaintenanceHelper r){
-//			Log.i("Populate","Column Name 0: "+r.getEntry(c, 0));
+			//			Log.i("Populate","Column Name 0: "+r.getEntry(c, 0));
 			rowMaint.setText(r.getEntry(c, 1));
-//			Log.i("Populate","Column Name 1: "+r.getEntry(c, 1));
+			//			Log.i("Populate","Column Name 1: "+r.getEntry(c, 1));
 			rowInterval.setText(r.getEntry(c, 2));
-//			Log.i("Populate","Column Name 2: "+r.getEntry(c, 2));
-			
+			//			Log.i("Populate","Column Name 2: "+r.getEntry(c, 2));
+
 		}
 	}
-
+	/**
+	 * Bits of service code. You usually won't need to change this.
+	 */
+	private ServiceConnection connection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName arg0, IBinder service) {
+			torqueService = ITorqueService.Stub.asInterface(service);
+		};
+		public void onServiceDisconnected(ComponentName name) {
+			torqueService = null;
+		};
+	};
 }
