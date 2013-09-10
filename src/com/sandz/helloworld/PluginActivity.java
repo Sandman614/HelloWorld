@@ -1,14 +1,19 @@
 package com.sandz.helloworld;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +38,10 @@ public class PluginActivity extends Activity {
 	private MaintenanceHelper helper = null;
 	private Cursor dataset_cursor = null;
 	private String maintID = null;
-	
+	//	Vehicle distance (Odometer) saved with profile
+	private final String MILEAGE = "0ff120C";
+	private Timer updateTimer;
+
 	private ITorqueService torqueService;
 
 
@@ -56,14 +64,42 @@ public class PluginActivity extends Activity {
 			list.setAdapter(adapter);
 
 			list.setOnItemClickListener(onListClick);
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.wtf("Tim", "Something is broken");
+			catchException(e);
 		}
+	}
 
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//
+//		// Bind to the torque service
+//		Intent intent = new Intent();
+//		intent.setClassName("com.sandz.helloworld", "org.prowl.torque.remote.TorqueService");
+//		boolean successfulBind = bindService(intent, connection, 0);
 
+//		if (successfulBind) {
+//			Log.i("Tim", "Succesful bind to torque service.");
+//			updateTimer = new Timer();
+//			updateTimer.schedule(new TimerTask() { public void run() {
+////			update();
+//				getMileage();
+//			}}, 1000, 200);
+//		}
+//	}
+//
+//	@Override
+//	protected void onPause() {
+//		// TODO Auto-generated method stub
+//		super.onPause();
+//		updateTimer.cancel();
+//		unbindService(connection);
+//	}
+
+	public void catchException(Exception e){
+		Log.wtf("Tim", "Something is broken");
 	}
 
 	@Override
@@ -85,16 +121,23 @@ public class PluginActivity extends Activity {
 	/*
 	 *  Adds a Notification to the database
 	 */
-	public void addNotification(View view){		
-		//		Log.i("Tim", "Entered onAdd()");
+	public void addNotification(View view){
 		edit_box();
 	}
 
 	/*
-	 *  Removes a Notification to the database
+	 *  Gets mileage from torque service
 	 */
-	public void removeNotification(View view){
-
+	public void getMileage(){
+		String[] ids = new String[]{MILEAGE};
+		try {
+			float[] pidValues = torqueService.getPIDValues(ids);
+			Log.i("Tim", "Mileage: "+pidValues[1]);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			catchException(e);
+		}
 	}
 
 	/* (non-Javadoc)
