@@ -77,28 +77,26 @@ public class PluginActivity extends Activity {
 		// Bind to the torque service
 		Log.i("Tim", "onResume() attempting to bindservice");
 		Intent intent = new Intent();
-		intent.setClassName("com.sandz.torque", "com.sandz.torque.remote.TorqueService");
-		Log.i("Tim", "Stop after setclassname.");
+	    intent.setClassName("org.prowl.torque", "org.prowl.torque.remote.TorqueService");
 		boolean successfulBind = bindService(intent, connection, 0);
-		Log.i("Tim", "Stop after bindservice."+ successfulBind);
 
 		if (successfulBind) {
 			Log.i("Tim", "Succesful bind to torque service.");
 //			updateTimer = new Timer();
 //			updateTimer.schedule(new TimerTask() { public void run() {
 ////			update();
-//				getMileage();
+				getMileage();
 //			}}, 1000, 200);
 		}
 	}
 //
 //	@Override
-//	protected void onPause() {
-//		// TODO Auto-generated method stub
-//		super.onPause();
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
 //		updateTimer.cancel();
-//		unbindService(connection);
-//	}
+		unbindService(connection);
+	}
 
 	public void catchException(Exception e){
 		Log.wtf("Tim", "Something is broken");
@@ -294,9 +292,11 @@ public class PluginActivity extends Activity {
 	private ServiceConnection connection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName arg0, IBinder service) {
 			torqueService = ITorqueService.Stub.asInterface(service);
+			Log.i("Tim","Service not null");
 		};
 		public void onServiceDisconnected(ComponentName name) {
 			torqueService = null;
+			Log.i("Tim","Service is null");
 		};
 	};
 }
